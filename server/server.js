@@ -5,9 +5,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var todos = require('./routes/todos');
+var livereload = require('livereload');
+
 var app = express();
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
+var livereloadServer = livereload.createServer();
+livereloadServer.watch(__dirname + '../dist');
+
+// view engine setup 
+app.set('views', path.join(__dirname, '../dist'));
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 app.use(logger('dev'));
@@ -17,6 +22,8 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../dist')));
+
 app.use('/', index);
 app.use('/api/v1/', todos);
 // catch 404 and forward to error handler
